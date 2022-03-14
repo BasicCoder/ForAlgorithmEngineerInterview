@@ -3,10 +3,40 @@
 ## 一面：
 
 1.算法题：一个数组包含不同的数字，查找随机一个峰值数字(二分)
+```C++
+class Solution{
+public:
+    int findLocalMax(vector<int> & nums){
+        if (nums[0] > nums[1]) {
+            return nums[0];
+        }
+        int n = nums.size();
+        if (nums[n-1] > nums[n-2]){
+            return nums[n-1];
+        }
+        int start = 1, end = n -2;
+        while(start <= end){
+            int mid = (start + end) / 2;
+            if (nums[mid -1] < nums[mid] && nums[mid] > nums[mid +1]) {
+                return nums[mid];
+            } else if (nums[mid - 1] < nums[mid]){
+                start = mid + 1;
+            } else {
+                end = mid - 1;
+            }
+
+        }
+        return -1;
+    }
+};
+```
 
 ## 二面：
 
 1.算法题：给定一个数字，输出这个数字不同的位数重新排列后，数值最小的数字。
+```C++
+
+```
 
 ## 三面：
 项目相关知识点
@@ -16,7 +46,47 @@
 ## 一面：
 
 1.算法题：有序数组中找到目标数字所在的区间位置(二分)
+```C++
+class Solution{
+public:
+    vector<int> findLocation(vector<int> &nums, int target){
+        vector<int> res = {-1, -1};
+        int i = 0;
+        int j = nums.size();
+        int start = -1;
+        int end = -1;
+        while(i < j){
+            int mid = (i + j) / 2;
+            if (nums[mid] == target){
+                start = mid;
+                j = mid;
+            }else if (nums[mid] < target){
+                i = mid + 1;
+            }else if (nums[mid] > target){
+                j = mid;
+            }
+        }
 
+        i = 0;
+        j = nums.size();
+        while(i < j){
+            int mid = (i + j) / 2;
+            if (nums[mid] == target){
+                end = mid;
+                i = mid + 1;
+            }else if (nums[mid] < target){
+                i = mid + 1;
+            }else if (nums[mid] > target){
+                j = mid;
+            }
+        }
+
+        res[0] = start;
+        res[1] = end;
+        return res;
+    }
+};
+```
 -------------------------
 # 格林深瞳
 ## 一面：
@@ -29,14 +99,80 @@
 1.算法题：
 有n个人和m对朋友关系，假设朋友关系具有传递性，问n个人共有多少个朋友圈。
 采用并查集
-
+```C++
+class Solution{
+public:
+    int get_root(int x, vector<int>& root){
+        if (root[x] == x){
+            return x;
+        } else {
+            root[x] = get_root(root[x], root);
+            return root[x];
+        }
+    }
+    int func(vector< vector<int> > &inputs, int n, int m){
+        vector<int> root(n +1, -1);
+        for(int i = 1; i <=n; ++i){
+            root[i] = i;
+        }
+        
+        for(int i = 1; i <=n; ++i){
+            for(int j: inputs[i]) {
+                int root_i = get_root(i, root);
+                int root_j = get_root(j, root);
+                if (root_i != root_j){
+                    root[root_j] = root_i;
+                }
+            }
+        }
+        vector<int> unique_root(n +1);
+        for(int i = 1; i <= n; ++i){
+            int r = get_root(i, root);
+            unique_root[r]= 1;
+        }
+        int res = 0;
+        for(int i: unique_root) {
+            res += i;
+        }
+        return res;
+    }
+};
+```
 -------------------------
 # 小红书
 ## 岗位：
 多模态资深算法工程师
 ### 一面：
 1.算法题：矩阵顺时针旋转90度，两种情况：N x N 方阵旋转和 N x M 矩阵旋转
-
+```C++
+class Solution{
+public:
+    void rotate(vector< vector<int> > & matrix){
+        int row = matrix.size();
+        int n = row;
+        i,j =  j, n - i +1 = n - i +1, n -j +1, n -j +
+        for(int i = 0; i < n /2; ++i){
+            for(int j = i; j < n - i - 1; ++j) {
+                int tmp = matrix[i][j];
+                matrix[i][j] = matrix[n -j -1][i];
+                matrix[n -j - 1][i] = matrix[n -i - 1][n -j -1];
+                matrix[n -i - 1][n - j - 1] = matrix[j][n -i - 1];
+                matrix[j][n - i -1] = tmp;
+            }
+        }
+    }
+    void rotate1(vector< vector<int> > & matrix){
+        int row = matrix.size();
+        int n = row;
+        for (int i = 0; i < n; ++i){
+            for (int j = i + 1; j < n; ++j){
+                swap(matrix[i][j], matrix[j][i]);
+            }
+            reverse(matrix[i].begin(), matrix[i].end());
+        }
+    }
+};
+```
 -------------------------
 # 美团
 ## 岗位：
@@ -44,7 +180,31 @@
 ### 一面：
 1.算法题：合并两个二叉搜索树
 2.算法题：有序数组，还原成平衡二叉树
-
+```C++
+struct Node{
+    int val;
+    Node* left;
+    Node* right;
+    Node(int val_, Node* left_ = NULL, Node* right_= NULL){
+        val = val_;
+        left = left_;
+        right = right_;
+    }
+};
+Node* dfs(int arr[], int left, int right){
+    if (left < right){
+        return NULL;
+    }
+    int mid = (left + right) / 2;
+    Node* root = new Node(arr[mid]);
+    root -> left = dfs(arr, left, mid -1);
+    root -> right = dfs(arr, mid + 1, right);
+    return root;
+}
+Node* build_tree(int arr[], int size){
+    return dfs(arr, 0, size -1);
+}
+```
 -------------------------
 # PDD
 ## 岗位：
