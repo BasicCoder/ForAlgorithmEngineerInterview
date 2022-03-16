@@ -173,6 +173,33 @@ public:
     }
 };
 ```
+### 二面：
+1.算法题：n x m 矩阵， 输入每个请求：左上角和右下角的坐标，输出：子矩阵和 
+```C++
+class Solution{
+public:
+    void computer_prefix_sum(vector< vector<int> >& m){
+        int rows = m.size();
+        int cols = m[0].size();
+        for (int r = 0; r < rows; ++r){
+            for(int c = 0; c < cols; ++c){
+                if (c > 0) m[r][c] += m[r][c - 1];
+                if (r > 0) m[r][c] += m[r-1][c];
+                if (r > 0 && c > 0) m[r][c] -= m[r-1][c-1];
+            }
+        }
+    }
+    int findSum(vector< vector<int> >& m, int r1, int c1, int r2, int c2){
+        //int rows = matrix.size();
+        //int cols = matrix[0].size();
+        computer_prefix_sum(m);
+        return m[r2][c2] - 
+            (c1 > 0 ? m[r2][c1 -1]:0) -
+            (r1 > 0 ? m[r1 - 1][c2]:0) +
+            (r1 > 0 && c1 > 0 ? m[r1-1][c1-1]:0);
+    }
+};
+```
 -------------------------
 # 美团
 ## 岗位：
