@@ -167,6 +167,54 @@ private:
 
 N皇后问题
 
+### 三面：
+1.算法题:
+判断一个单向链表是否存在环，若存在，输出入口节点位置。
+```C++
+struct Node{
+    int val;
+    Node* next;
+    Node(int _val):val(_val){}
+};
+class Solution{
+public:
+    bool isRing(Node* head){
+        if (!head) return false;
+        Node* slow = head;
+        Node* fast = head;
+        do{
+            if (!fast -> next || !fast -> next -> next){
+                return false;
+            }
+            slow = slow -> next;
+            fast = fast -> next -> next;
+        }while(slow != fast);
+        return true;
+    }
+    Node* findEnter(Node* head){
+        if (!head) return NULL;
+        Node *p, *q;
+        q = head, p = head -> next;
+        if( !p) return NULL;
+        while(p &&q && p != q){
+            p = p -> next;
+            q = q -> next;
+            if (p){
+                p = p -> next;
+            }else{
+                return NULL;
+            }
+        }
+        p = head, q = q -> next;
+        while(p != q){
+            p = p -> next;
+            q = q -> next;
+        }
+        return p;
+    }
+};
+```
+
 -------------------------
 # 小红书
 ## 岗位：
