@@ -309,6 +309,24 @@ Node* build_tree(int arr[], int size){
     return dfs(arr, 0, size -1);
 }
 ```
+
+### 三面：
+
+1.算法题：用Neon指令切分RGB的三个通道
+```C++
+class Solution{
+    void splitRGB(void *src, int len, void *dst){
+        int num8x16 = len / 16;
+        uint8x16x3_t vdst;
+        for (int i = 0; i < num8x16; ++i)
+            vdst = vld3q_u8(src+ 3 * 16 * i);
+            vst1q_u8(dst + 16 * i, vdst.val[0]); //R
+            vst1q_u8(dst + len / 3 + 16 * i, vdst.val[1]); //G
+            vst1q_u8(dst + len / 3 * 2 + 16 * i, vdst.val[2]); //B
+        }
+};
+```
+
 -------------------------
 # PDD
 ## 岗位：
