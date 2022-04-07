@@ -167,6 +167,54 @@ private:
 
 N皇后问题
 
+### 三面：
+1.算法题:
+判断一个单向链表是否存在环，若存在，输出入口节点位置。
+```C++
+struct Node{
+    int val;
+    Node* next;
+    Node(int _val):val(_val){}
+};
+class Solution{
+public:
+    bool isRing(Node* head){
+        if (!head) return false;
+        Node* slow = head;
+        Node* fast = head;
+        do{
+            if (!fast -> next || !fast -> next -> next){
+                return false;
+            }
+            slow = slow -> next;
+            fast = fast -> next -> next;
+        }while(slow != fast);
+        return true;
+    }
+    Node* findEnter(Node* head){
+        if (!head) return NULL;
+        Node *p, *q;
+        q = head, p = head -> next;
+        if( !p) return NULL;
+        while(p &&q && p != q){
+            p = p -> next;
+            q = q -> next;
+            if (p){
+                p = p -> next;
+            }else{
+                return NULL;
+            }
+        }
+        p = head, q = q -> next;
+        while(p != q){
+            p = p -> next;
+            q = q -> next;
+        }
+        return p;
+    }
+};
+```
+
 -------------------------
 # 小红书
 ## 岗位：
@@ -261,8 +309,38 @@ Node* build_tree(int arr[], int size){
     return dfs(arr, 0, size -1);
 }
 ```
+
+### 三面：
+
+1.算法题：用Neon指令切分RGB的三个通道
+```C++
+class Solution{
+    void splitRGB(void *src, int len, void *dst){
+        int num8x16 = len / 16;
+        uint8x16x3_t vdst;
+        for (int i = 0; i < num8x16; ++i)
+            vdst = vld3q_u8(src+ 3 * 16 * i);
+            vst1q_u8(dst + 16 * i, vdst.val[0]); //R
+            vst1q_u8(dst + len / 3 + 16 * i, vdst.val[1]); //G
+            vst1q_u8(dst + len / 3 * 2 + 16 * i, vdst.val[2]); //B
+        }
+};
+```
+
 -------------------------
-# PDD
+# PDD (流程结束)
 ## 岗位：
 搜索算法-图像方向
 ### 一面：
+1.场景问题：多目标优化、联合优化问题
+
+### 二面：
+2.算法题：
+两个有序数组中位数
+
+# 字节
+
+## 岗位：
+计算机视觉算法工程师
+### 一面：
+
