@@ -343,4 +343,27 @@ class Solution{
 ## 岗位：
 计算机视觉算法工程师
 ### 一面：
+1.算法题: 跳跃游戏LeetCode45
 
+给定一个非负整数数组，你最初位于数组的第一个位置。数组中的每个元素代表你在该位置
+可以跳跃到的最大长度。你的目标是使用最少的跳跃次数达到数组的最后一个位置。
+
+```C++
+class Solution{
+public:
+    int jump(vector<int> &nums){
+        int i = 0, j = 1, steps = 0, n = nums.size();
+        while(j < n){
+            int end = min(nums[i] + i + 1, end);
+            while(j < end){
+                if (nums[j] + j > nums[i] + i){
+                    i = j;
+                }
+                ++j;
+            }
+            ++steps;
+        }
+        return steps;
+    }
+};
+```
