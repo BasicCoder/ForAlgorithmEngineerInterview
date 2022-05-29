@@ -328,7 +328,7 @@ class Solution{
 ```
 
 -------------------------
-# PDD (流程结束)
+# PDD (不匹配，结束)
 ## 岗位：
 搜索算法-图像方向
 ### 一面：
@@ -338,9 +338,106 @@ class Solution{
 2.算法题：
 两个有序数组中位数
 
-# 字节
-
+# 字节 （不匹配）
 ## 岗位：
 计算机视觉算法工程师
 ### 一面：
+1.算法题: 跳跃游戏LeetCode45
 
+给定一个非负整数数组，你最初位于数组的第一个位置。数组中的每个元素代表你在该位置
+可以跳跃到的最大长度。你的目标是使用最少的跳跃次数达到数组的最后一个位置。
+
+```C++
+class Solution{
+public:
+    int jump(vector<int> &nums){
+        int i = 0, j = 1, steps = 0, n = nums.size();
+        while(j < n){
+            int end = min(nums[i] + i + 1, end);
+            while(j < end){
+                if (nums[j] + j > nums[i] + i){
+                    i = j;
+                }
+                ++j;
+            }
+            ++steps;
+        }
+        return steps;
+    }
+};
+```
+# Shopee
+## 岗位：
+图像处理算法工程师
+### 一面：
+1.算法题: 求三个矩形ROI的交集区域
+
+```C++
+int area(int x1, int y1, int x2, int y2){
+    return (x2 - x1) * (y2 - y1);
+}
+vector<int> get_intersection(int left1, int top1, int right1, int bottom1, int left2, int top2, int right2, int bottom2){
+    int left3 = max(left1, left2);
+    int right3 = min(right1, right2);
+    int top3 = max(top1, top2);
+    int bottom3 = min(bottom1, bottom2);
+    
+    if(left3 > right3 || top3 > bottom3){
+        return {-1, -1, -1, -1};
+    } else {
+        return {left3, right3, top3, bottom3};
+    }
+}
+int get_insertROI(vector<int> &a, vector<int> &b, vector<int> &c){
+    vector<int> ab = get_intersection(a[0], a[1], a[2], a[3], b[0], b[1], b[2], b[3]);
+    vector<int> ac = get_intersection(a[0], a[1], a[2], a[3], c[0], c[1], c[2], c[3]);
+    vector<int> bc = get_intersection(b[0], b[1], b[2], b[3], c[0], c[1], c[2], c[3]);
+
+    vector<int> abc = get_intersection(ab[0],ab[1], ab[2], ab[3], c[0], c[1], c[2], c[3]);
+
+    int sum1 = aera(ab[0], ab[1], ab[2], ab[3]);
+    int sum2 = aera(ac[0], ac[1], ac[2], ac[3]);
+    int sum3 = aera(bc[0], bc[1], bc[2], bc[3]);
+
+    int sum = sum1 + sum2 + sum3 - 2 * area(abc[0], abc[1], abc[2], abc[3]);
+
+    return sum;
+}
+```
+
+2.算法题：求最大的矩形面积
+
+```C++
+class Solution{
+public:
+    int largestRectangleArea(vector<int> & heights){
+        int n = heights.size();
+        vector<int> left(n), right(n);
+        stack<int> mono_stack;
+        
+        for(int i = 0; i < n; ++i){
+            while(!mono_stack.empty() && heights[mono_stack.top()] >= heights[i]){
+                mono_stack.pop();
+            }
+            left[i] = (mono_stack.empty() ? -1: mono_stack.top());
+            mono_stack.push(i);
+        }
+
+        mono_stack = stack<int>();
+
+        for(int i = n -1; i >= 0; --i){
+            while(!mono_stack.empty() && heights[mono_stack.top()] >= heights[i]){
+                mono_stack.pop();
+            }
+            right[i] = (mono_stack.empty() ? n: mono_stack.top());
+            mono_stack.push(i);
+        }
+
+        int ans = 0;
+        for(int i = 0; i < n; ++i){
+            ans = max(ans, (right[i] - left[i] - 2) * heights[i]);
+        }
+        return ans;
+    }
+};
+```
